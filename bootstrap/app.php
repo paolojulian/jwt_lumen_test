@@ -60,9 +60,9 @@ $app->singleton(
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+    'auth' => App\Http\Middleware\Authenticate::class,
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -76,8 +76,20 @@ $app->singleton(
 */
 
 $app->register(App\Providers\AppServiceProvider::class);
+$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+$app->register(App\Providers\EventServiceProvider::class);
+
+//for enable generator permanently
+// $app->register(SMSkin\LumenMake\LumenMakeServiceProvider::class);
+
+// //for enable generator in development mode
+if (env('APP_ENV') != 'production' || env('APP_ENV') == 'local') {
+    $app->register(SMSkin\LumenMake\LumenMakeServiceProvider::class);
+}
+
+$app->register(SMSkin\LumenMake\Providers\FormRequestServiceProvider::class);
+$app->register(App\Providers\FormRequestServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -95,5 +107,6 @@ $app->router->group([
 ], function ($router) {
     require __DIR__.'/../routes/web.php';
 });
+
 
 return $app;

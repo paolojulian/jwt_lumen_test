@@ -19,7 +19,10 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'username'
+        'name',
+        'email',
+        'username',
+        'usertype'
     ];
 
     /**
@@ -31,9 +34,24 @@ class User extends Model implements JWTSubject, AuthenticatableContract, Authori
         'password',
     ];
 
-    public function responseCreateSuccess() {
-        $msg = "$this->name has been successfully created";
-        return response()->json([$msg], 201);
+    public function isSuperAdmin()
+    {
+        return $this->usertype == 1;
+    }
+
+    public function isAdmin()
+    {
+        return $this->usertype == 2;
+    }
+
+    public function isClient()
+    {
+        return $this->usertype == 3;
+    }
+
+    public function pages()
+    {
+        return $this->hasMany(Page::class, 'last_updated_by');
     }
 
     public function getJWTIdentifier()

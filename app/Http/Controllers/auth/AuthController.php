@@ -5,7 +5,6 @@ namespace App\Http\Controllers\auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\JWTAuth;
-use Illuminate\Support\Facades\Hash;
 use App\User;
 
 class AuthController extends Controller
@@ -51,25 +50,10 @@ class AuthController extends Controller
 
         }
 
-        return response()->json(compact('token'));
+        return response()->json(compact('token'), 200);
     }
 
-    public function create(Request $request) {
-
-        $this->validate($request, [
-            'name' => 'required|max:100',
-            'username' => 'required|unique:users|max:50',
-            'email' => 'required|email|max:255',
-            'password' => 'required',
-        ]);
-
-        $user = new User;
-        $user->name = $request->name;
-        $user->username = $request->username;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
-
-        return $user->responseCreateSuccess();
+    public function checkToken () {
+        return response()->json(['Can Access'], 200);
     }
 }
